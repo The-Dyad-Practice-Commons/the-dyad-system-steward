@@ -1,0 +1,62 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:dyad-operator/cos-nickname",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "cos-nickname",
+  "name": "Chief-of-staff nickname",
+  "description": "Which candidate name the home recommends as its nickname, the value of the preference chief-of-staff-nickname: the record ranks the candidates and never sets one, since the value is the operator's.",
+  "dyad:decides": "Among the candidate nicknames proposed for the home, which is excluded, which is recommended and which are alternatives?",
+  "dyad:inputs": [
+    "each candidate's spoken form: one word, its syllables, its spelling (N1)",
+    "whether the figure is a deity, saint, prophet or object of worship, or a figure whose story is chiefly a cult's (N2)",
+    "whether the name is already a nickname of another of the operator's systems, or a major product or company name (N3)",
+    "whether the figure carries a harmful legacy, or is a living or recent person (N4)",
+    "the figure's defining act, against the home's: keeping the record, relaying between parties, managing another's attention, never ruling or deciding (R1)",
+    "how the name reads inside the preference agent-signature (R2)",
+    "whether the figure is remembered for the very act the role must not do (R3)",
+    "whether the name carries an initial that pairs with the operator's, a tie-break only (R4)"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "excluded",
+      "name": "excluded",
+      "dyad:when": "the candidate fails any of N1 to N4",
+      "dyad:then": "it is named with the criterion it fails and is never recommended"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "recommended",
+      "name": "recommended",
+      "dyad:when": "the candidate passes N1 to N4 and ranks first by R1, then R2, then R3, R4 breaking only a tie",
+      "dyad:then": "the home proposes it as the value of chief-of-staff-nickname, in a preferences-zone PR the operator disposes"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "alternative",
+      "name": "alternative",
+      "dyad:when": "the candidate passes N1 to N4 and is not ranked first",
+      "dyad:then": "it is listed after the recommended one, with the criterion on which it ranks lower"
+    }
+  ],
+  "dyad:precedence": "N1 to N4 filter; among the candidates that pass, R1 orders first, then R2, then R3; R4 orders nothing above R1 and breaks only a tie.",
+  "dyad:default": "no candidate passes N1 to N4: none is recommended, and the home proposes new candidates.",
+  "dyad:judgedBy": {
+    "dyad:kind": "inference",
+    "dyad:implementation": null
+  },
+  "isPartOf": "urn:dyad:craft:dyad-operator",
+  "dyad:home": "templates/PREFERENCES.md",
+  "dyad:alsoIn": [
+    "rules/RULE-2-no-self-ratify.md"
+  ],
+  "dyad:owner": "Rule-2"
+}

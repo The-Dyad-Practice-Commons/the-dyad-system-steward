@@ -1,0 +1,86 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:dyad-operator/attention-calendar",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "attention-calendar",
+  "name": "Attention calendar",
+  "description": "When the home presents the questions ready to ask, read against the operator's attention windows: stretches of the operator's bound calendar marked for this work, which the home reads through the calendar connector its session holds and writes to a private store as start and end times only, with no title, attendee or calendar id. It decides when, never what: the order is dmc:attention-strategy's and dmc:next-best-disposition's. A question it holds is recorded and asked later, never refused and never answered for the operator. A write to the calendar is no part of this record: it is the operator's own record outside the system, its own question each time (#740). A red PR the unit owns, and a question an operator prompt asks for directly, are never held either: no record the code reads holds them, so the home presents them now by its conduct (the attention play-book's A7).",
+  "dyad:decides": "Of the questions ready to ask, which are presented now and which are held for a later attention window?",
+  "dyad:inputs": [
+    "the window list from the private store (the central repository's operator/windows.md, else <git common dir>/dyad-attention-windows.txt): each window's start and end in the operator's time zone, and the horizon the list was read to",
+    "now",
+    "each ready question, in the order dmc:attention-strategy and dmc:next-best-disposition give, its cost taken as calendar-question-minutes",
+    "which questions are owed and urgent, as the code reads them: dmc:attention-strategy's owed candidates and the core floor's kinds, a destructive or release question in flight",
+    "the shortest stretch counted as a window, calendar-window-min"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "owed",
+      "name": "asked now",
+      "dyad:when": "the question is owed and urgent as dmc:attention-strategy's owed tier or the core floor's kinds give it (a destructive or release question in flight)",
+      "dyad:then": "presented now, inside a window or not",
+      "dyad:effect": "settles"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "no-calendar",
+      "name": "as today",
+      "dyad:when": "no window list exists, or the list is past its horizon",
+      "dyad:then": "the calendar holds nothing; every question is presented as the other records say",
+      "dyad:effect": "settles"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "in-window",
+      "name": "asked in this window",
+      "dyad:when": "now is inside a window at least calendar-window-min long, and the question fits in the window's remaining minutes after the questions already placed in it, taken in order",
+      "dyad:then": "presented now",
+      "dyad:effect": "settles"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "next-window",
+      "name": "held for the next window",
+      "dyad:when": "now is outside every window, or the question does not fit in the remaining minutes",
+      "dyad:then": "recorded and never refused, counted in Coming as deferred with the next window's start, and presented then",
+      "dyad:effect": "skips"
+    }
+  ],
+  "dyad:precedence": "asked now first; then as today; then asked in this window; then held for the next window. Ordering is done before this record reads a question: the calendar decides only when.",
+  "dyad:default": "as today: with no window list, the calendar holds nothing.",
+  "dyad:tunables": [
+    {
+      "dyad:preference": "calendar-question-minutes",
+      "dyad:defaultValue": "3",
+      "dyad:allowed": "a positive integer (minutes a question is taken to cost inside a window)",
+      "dyad:readBy": "scripts/strategy.py"
+    },
+    {
+      "dyad:preference": "calendar-window-min",
+      "dyad:defaultValue": "10",
+      "dyad:allowed": "a positive integer (minutes: a shorter marked stretch is no window)",
+      "dyad:readBy": "scripts/strategy.py"
+    }
+  ],
+  "dyad:judgedBy": {
+    "dyad:kind": "mechanical",
+    "dyad:implementation": "scripts/strategy.py"
+  },
+  "isPartOf": "urn:dyad:craft:dyad-operator",
+  "dyad:home": "playbooks/attention.md",
+  "dyad:alsoIn": [
+    "dmc/attention-strategy.jsonld",
+    "dmc/next-best-disposition.jsonld",
+    "rules/RULE-3-d-work.md"
+  ],
+  "dyad:owner": "Rule-3"
+}

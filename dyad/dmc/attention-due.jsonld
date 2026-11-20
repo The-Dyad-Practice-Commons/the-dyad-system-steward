@@ -1,0 +1,75 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:dyad-operator/attention-due",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "attention-due",
+  "name": "Attention row due",
+  "description": "When a backlog row of attention work (dmc/attention-work.jsonld) is due to be opened under attention-mandate, and within what capacity: the attention play-book's condition, never the operator's prompt (#707).",
+  "dyad:decides": "Is an attention row due to be opened under the mandate now, and within what capacity?",
+  "dyad:inputs": [
+    "dyad attention sync and its replay: an entry the board or the rows hold that the ledger lacks (a gap)",
+    "the automaton sweep's attention findings, standing or new",
+    "the weekly review's list of attention rows, and today's focus",
+    "the rows already in flight under attention-mandate, and the tunable attention-ceiling"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D1",
+      "name": "gap",
+      "dyad:when": "a sync or its replay reports a gap the row names, after the row was filed",
+      "dyad:then": "due"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D2",
+      "name": "standing failure",
+      "dyad:when": "the automaton sweep reports the attention failure the row names standing on two reads",
+      "dyad:then": "due"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D3",
+      "name": "review",
+      "dyad:when": "the weekly review lists the row and today's focus does not name it as deferred",
+      "dyad:then": "due"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "not-due",
+      "name": "not due",
+      "dyad:when": "none of D1, D2 or D3 holds, or attention-ceiling rows are already in flight under the mandate",
+      "dyad:then": "the row waits in backlog",
+      "dyad:effect": "settles"
+    }
+  ],
+  "dyad:precedence": "Capacity first: at attention-ceiling nothing is due. Then D1, D2, D3, any one sufficing.",
+  "dyad:default": "not-due",
+  "dyad:tunables": [
+    {
+      "dyad:preference": "attention-ceiling",
+      "dyad:defaultValue": "1",
+      "dyad:allowed": "a positive integer (attention rows in flight under the mandate at once)",
+      "dyad:readBy": "scripts/package.py"
+    }
+  ],
+  "dyad:judgedBy": {
+    "dyad:kind": "inference",
+    "dyad:implementation": null
+  },
+  "isPartOf": "urn:dyad:craft:dyad-operator",
+  "dyad:home": "playbooks/attention.md",
+  "dyad:alsoIn": [
+    "dmc/attention-work.jsonld",
+    "dmc/hardening-due.jsonld"
+  ],
+  "dyad:owner": "Rule-3"
+}

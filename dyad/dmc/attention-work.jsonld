@@ -1,0 +1,82 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:dyad-operator/attention-work",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "attention-work",
+  "name": "Attention work",
+  "description": "Which backlog rows are attention work, the class the mandate preference attention-mandate may open with no intent or plan question (Rule-3 Scope, #707). Attention is back-office work the operator owns and does not attend: the ledger of what waits on the operator. Its Done is always asked, since it ratifies a merge (Rule-2).",
+  "dyad:decides": "Is this backlog row attention work, which attention-mandate may open with no intent or plan question?",
+  "dyad:inputs": [
+    "the row's first disposed entry, its refs, and the plans of the rows they name",
+    "the row's plan file once written: the files it touches, the surface it adds, the acts it names",
+    "the attention ledger's own files: dyad/scripts/attention.py, its tests, the vocabulary row attention ledger, dyad/playbooks/attention.md",
+    "Rule-2's never-accretable list"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "A1",
+      "name": "source",
+      "dyad:when": "the row was carried by a plan that runs the attention play-book or names dmc/attention-work.jsonld as its mandate scope's class (its first entry Y backlog (mandate #N)), or its refs name a row whose plan ran the attention play-book",
+      "dyad:then": "the source holds; read mechanically by scripts/package.py"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "A2",
+      "name": "reach",
+      "dyad:when": "its fix touches only the attention ledger's own files (inputs)",
+      "dyad:then": "the reach holds; judged when the row is planned"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "A3",
+      "name": "surface",
+      "dyad:when": "it restores or extends what those files already state, and adds no public surface beyond attention's own verbs: no other dyadlib.CLI or dyad/surface.md row, no Rule or preference text",
+      "dyad:then": "the surface holds"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "A4",
+      "name": "acts",
+      "dyad:when": "it holds no act Rule-2 never lets a Y carry: a destructive host action, a release, an intake, a preference value",
+      "dyad:then": "the acts hold"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "attention",
+      "name": "attention work",
+      "dyad:when": "A1, A2, A3 and A4 all hold",
+      "dyad:then": "attention-mandate may open it (dmc/attention-due.jsonld decides when); its Done is asked at the weekly review (dmc/next-best-disposition.jsonld, weekly)",
+      "dyad:effect": "skips"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "ordinary",
+      "name": "ordinary",
+      "dyad:when": "any of A1, A2, A3 or A4 fails, before the row is opened or found in its plan",
+      "dyad:then": "every question is asked, as for any row; a row found ordinary after the mandate opened it returns to explicit mode by the escalate edge, the agent reporting it and asking",
+      "dyad:effect": "asks"
+    }
+  ],
+  "dyad:precedence": "A1 first, read before the row is opened; A2, A3 and A4 when its plan is written, and again at its Done; any failure makes the row ordinary.",
+  "dyad:default": "ordinary",
+  "dyad:judgedBy": {
+    "dyad:kind": "inference",
+    "dyad:implementation": "scripts/package.py"
+  },
+  "isPartOf": "urn:dyad:craft:dyad-operator",
+  "dyad:home": "playbooks/attention.md",
+  "dyad:alsoIn": [
+    "dmc/attention-due.jsonld",
+    "dmc/hardening-work.jsonld"
+  ],
+  "dyad:owner": "Rule-3"
+}
