@@ -1,0 +1,81 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:cabinet/executor-unit",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "executor-unit",
+  "name": "Executor unit: who executes a planned row",
+  "description": "Which unit or units execute a planned row, read from the charters' write fences (the mandates table) against the files the plan touches and the acts it names, before dmc:scale-out and dmc:unit-lifecycle decide how many units and which session. The home executes no plan, so it is never an outcome; a requesting unit executes only where its own fence covers the whole plan.",
+  "dyad:decides": "Who executes this planned row: the requester, one other unit, a split by lane, or none yet, and at what cost in questions?",
+  "dyad:inputs": [
+    "the plan's files touched and the acts it names (a host action, a release, a preference value)",
+    "each charter's fence and escalations, from the mandates table",
+    "the home's exclusion: the home executes no plan (Rule-3 Scope; the program charter)",
+    "the requesting unit, if a unit's request opened the row",
+    "for a path no fence covers, the done rows whose PRs last wrote that path, and the unit that wrote it"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "requester",
+      "name": "the requester",
+      "dyad:when": "the requesting unit's fence covers every path the plan touches and every act it names",
+      "dyad:then": "the requesting unit executes the row",
+      "dyad:effect": "settles"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "one-unit",
+      "name": "one other unit",
+      "dyad:when": "one charter's fence, not the requester's, covers every path and every act",
+      "dyad:then": "that charter's unit executes the row; dmc:unit-lifecycle says which session holds it",
+      "dyad:effect": "settles"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "split",
+      "name": "a split by lane",
+      "dyad:when": "no one fence covers the whole plan, and each lane (a group of paths and acts) is covered by exactly one fence",
+      "dyad:then": "one unit per lane; one PR per zone (Rule-1), the lanes of one zone stacked as commits on one branch",
+      "dyad:effect": "settles"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "charter-gap",
+      "name": "a charter gap",
+      "dyad:when": "a path or act the plan names lies inside no charter's fence, though a charter's domain covers its work",
+      "dyad:then": "that lane goes to the unit whose done rows last wrote the path; the home asks the charter edit naming it as its own preferences-zone question, in the same batch as the row's next question",
+      "dyad:effect": "asks"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "new-unit",
+      "name": "a new unit",
+      "dyad:when": "a lane no charter's domain covers at all",
+      "dyad:then": "dmc:unit-lifecycle decides between a desk and a new function, each its own question",
+      "dyad:effect": "asks"
+    }
+  ],
+  "dyad:precedence": "the requester, then one other unit, then a split by lane, then a charter gap, then a new unit: the first that applies. A unit's load or idleness, the zone and the row's size move no outcome; dmc:unit-lifecycle reads load and idleness after.",
+  "dyad:default": "a charter gap: a path no fence covers is never dispatched without the operator seeing the gap.",
+  "dyad:judgedBy": {
+    "dyad:kind": "inference",
+    "dyad:implementation": null
+  },
+  "isPartOf": "urn:dyad:craft:cabinet",
+  "dyad:home": "docs/operating-guide.md",
+  "dyad:alsoIn": [
+    "rules/organization.md",
+    "dmc/charter-fence.jsonld",
+    "dmc/unit-lifecycle.jsonld",
+    "dmc/scale-out.jsonld"
+  ],
+  "dyad:owner": "cabinet:organization"
+}
