@@ -1,0 +1,98 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:dyad-operator/attention-strategy",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "attention-strategy",
+  "name": "Attention strategy",
+  "description": "Where a candidate the home would show or propose to the operator sits in the operator's attention order: what is owed first, then the operator's standing goals by horizon, then today's focus as a fading weight, then the urgency the existing criteria already rank. The mechanism is shared by every operator; the goals, the focus and the settings are each operator's own. It authorizes nothing: an item becomes work only by its own question or an operator prompt.",
+  "dyad:decides": "In what order does the home put the candidates it shows or proposes to this operator?",
+  "dyad:inputs": [
+    "the candidates: the backlog rows promotion (dmc/promotion.jsonld) ranks and the items Recommended for next (dmc/recommended-next.jsonld) lists, each with its promotion class P1-P6 or its trigger kind",
+    "the operator's goal stack: each goal's id G<n>, its horizon (long-term, a quarter or more; intermediate, weeks), its review date and its status, its words the operator's own and never the agent's; read from the operator's central repository (operator/goals.md) when the checkout names one, else preferences-corpus/ATTENTION.md",
+    "the grounding: the serves lines on the home's cross-row board entry, `#<id> G<n>|none (<reason>) @<ISO time>`, the home's inference recorded write-ahead, holding the goal's id and never its words; a line the row has changed past is stale",
+    "today's focus: the newest focus entries (operator/focus.md, else the focus key on the home's cross-row entry), each stated (the operator's words) or inferred (the home's one-line reading, never the operator's words), with its time",
+    "the operator's settings: attention-conflict (goals-first or blend), focus-half-life-days and inferred-focus-weight, read from the central repository's operator/settings.md first, then preferences-corpus/PREFERENCES.md, then this record's defaults",
+    "the operator's own overlay records (operator/dmc/ in the central repository), each declaring dyad:extends dmc:attention-strategy; an overlay outcome whose effect is acts or skips is refused",
+    "the attention windows (dmc:attention-calendar), read only after the order is set: the calendar decides when a candidate is presented, never its place"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "owed",
+      "name": "owed",
+      "dyad:when": "the candidate is promotion's P1 (a live defect) or P2 (a promise)",
+      "dyad:then": "ordered first, before any goal: it is owed, not chosen, and no setting moves it",
+      "dyad:effect": "shapes"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "long-term",
+      "name": "serves a long-term goal",
+      "dyad:when": "a current serves line names an active long-term goal",
+      "dyad:then": "the first alignment tier; shown as `serves G<n>`",
+      "dyad:effect": "shapes"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "intermediate",
+      "name": "serves an intermediate goal",
+      "dyad:when": "a current serves line names an active intermediate goal, and none a long-term one",
+      "dyad:then": "the second alignment tier; shown as `serves G<n>`",
+      "dyad:effect": "shapes"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "unaligned",
+      "name": "serves none",
+      "dyad:when": "the serves line names none, is stale, or is absent, or no goal is recorded",
+      "dyad:then": "the last tier; shown as `serves none`; with no goal recorded every candidate is here, so the order is the existing one moved only by focus, and the home says once that no goals are recorded",
+      "dyad:effect": "shapes"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "departs",
+      "name": "a focus departing every goal",
+      "dyad:when": "today's stated focus matches a candidate that serves none while goals are recorded",
+      "dyad:then": "shown once, with the goals it departs from, so the operator adopts it as a goal or keeps it for today; never silently obeyed or ignored",
+      "dyad:effect": "shapes"
+    }
+  ],
+  "dyad:precedence": "Owed first, then by alignment tier (long-term, intermediate, serves none), then by focus, then by urgency (promotion's P3-P6 and Recommended for next's trigger kinds in their own order). Under attention-conflict goals-first (the default) the comparison is lexicographic, so focus reorders only within one tier and never lifts a candidate past one in a higher tier; under blend the tier and the focus weight are summed, the long-term tier 2, the intermediate 1, serves none 0. A focus weighs its source (stated 1, inferred inferred-focus-weight) times 0.5 to the power of its age in days over focus-half-life-days, the newest focus matching a candidate counting, and a weight below 0.05 counting as none. The record has no size term: the dyad records no size estimate, and altitude splits a row rather than measuring one. The order is set before dmc:attention-calendar reads it: the calendar decides only when a candidate is presented, never its place (#740).",
+  "dyad:default": "unaligned",
+  "dyad:tunables": [
+    {
+      "dyad:preference": "focus-half-life-days",
+      "dyad:defaultValue": "1",
+      "dyad:allowed": "a positive number of days (a focus's weight halves over each)",
+      "dyad:readBy": "scripts/strategy.py"
+    },
+    {
+      "dyad:preference": "inferred-focus-weight",
+      "dyad:defaultValue": "0.5",
+      "dyad:allowed": "a number between 0 and 1 (an inferred focus's weight against a stated one's 1)",
+      "dyad:readBy": "scripts/strategy.py"
+    }
+  ],
+  "dyad:judgedBy": {
+    "dyad:kind": "mechanical",
+    "dyad:implementation": "scripts/strategy.py"
+  },
+  "isPartOf": "urn:dyad:craft:dyad-operator",
+  "dyad:home": "playbooks/attention.md",
+  "dyad:alsoIn": [
+    "dmc/promotion.jsonld",
+    "dmc/recommended-next.jsonld",
+    "dmc/backlog-staleness.jsonld",
+    "dmc/preference-kind.jsonld",
+    "dmc/attention-calendar.jsonld"
+  ],
+  "dyad:owner": "Rule-3"
+}

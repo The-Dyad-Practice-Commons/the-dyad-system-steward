@@ -1,0 +1,66 @@
+{
+  "@context": [
+    "https://schema.org",
+    {
+      "dyad": "urn:dyad:term:"
+    }
+  ],
+  "@id": "urn:dyad:dmc:dyad-operator/calendar-access-direction",
+  "@type": [
+    "DefinedTermSet",
+    "dyad:DecisionCriterion"
+  ],
+  "identifier": "calendar-access-direction",
+  "name": "Calendar access direction",
+  "description": "How much of one calendar a dyad system's home may read, by what the calendar holds against where the reader's records go, so that no confidential content reaches a store less private than its source.",
+  "dyad:decides": "May this reader read this calendar, and if so, busy times only or its content?",
+  "dyad:inputs": [
+    "what the calendar holds: client-confidential, personal, or public",
+    "where the reader's records go: a public repository, or a private one bound to the same confidentiality",
+    "what the reader writes verbatim: a prompt or a relay can carry a title into a provenance record",
+    "what the reader needs: busy times to avoid a conflict, or the event's content"
+  ],
+  "hasDefinedTerm": [
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D1",
+      "name": "no access",
+      "dyad:when": "the reader needs nothing from the calendar",
+      "dyad:then": "no binding is made"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D2",
+      "name": "busy times only",
+      "dyad:when": "the reader needs to avoid conflicts, or D3's condition does not hold",
+      "dyad:then": "the binding is `busy`: start, end and busy status are read for one run, never a title, attendee, location or note in any tracked file; content read into a session and an untracked brief only (the attention play-book's A8, #750)"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D3",
+      "name": "detail, one way",
+      "dyad:when": "the reader needs the content, the calendar's content is no more sensitive than the reader's store, and that store is private",
+      "dyad:then": "the reader may read the content of that calendar in that one direction; the reverse direction is judged on its own inputs"
+    },
+    {
+      "@type": "DefinedTerm",
+      "termCode": "D4",
+      "name": "refused",
+      "dyad:when": "the reader would take detail from a client-confidential calendar into a system whose records are public",
+      "dyad:then": "detail is refused; busy times only is the most the reader may have"
+    }
+  ],
+  "dyad:precedence": "refused first; then no access; then detail, one way, only when its condition holds; otherwise busy times only.",
+  "dyad:default": "busy times only: the inputs cannot say the content is safe to read",
+  "dyad:judgedBy": {
+    "dyad:kind": "inference",
+    "dyad:implementation": null
+  },
+  "isPartOf": "urn:dyad:craft:dyad-operator",
+  "dyad:home": "playbooks/attention.md",
+  "dyad:alsoIn": [
+    "scripts/attention.py",
+    "rules/RULE-2-no-self-ratify.md"
+  ],
+  "dyad:owner": "Rule-2"
+}
