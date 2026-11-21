@@ -1,5 +1,5 @@
 session: maintain-e294da39
-seen: 2026-11-21T01:00:11+00:00
+seen: 2026-11-21T01:00:49+00:00
 root: /home/pt/the-dyad-system-steward
 rows: 2 3 4 10
 files: 
