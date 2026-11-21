@@ -6,7 +6,11 @@
 # postcondition: a claude session named program is running on this host with a terminal, and stays running after its first turn
 # destructive: none
 set -euo pipefail
-git rev-parse --short HEAD; sha256sum "$0"
+# Run from anywhere: resolve this script, then stand in its own checkout, so the
+# commit and hash below are this file's own and `git` reads the right repository.
+self="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
+cd "$(git -C "$(dirname "$self")" rev-parse --show-toplevel)"
+git rev-parse --short HEAD; sha256sum "$self"
 
 postcondition() {
   # read-only: a live `claude … --remote-control program` on this host
